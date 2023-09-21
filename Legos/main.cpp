@@ -3,36 +3,15 @@
 #include "Lista.h"
 #include <vector>
 
-//Material
-int piezas_piso = 1000;
-int piezas_paredes = 1000;
-int piezas_techo = 1000;
-int piezas_cielo = 1000;
 
-//Cantidad de objetos
-int cuarto_ = 0;
-int cocina_ = 0;
-int comedor_ = 0;
-int terraza_ = 0;
-int piscina_ = 0;
 
-//Cantidad de piezas por objeto, hay que poner una cantidad
-int cantPiso = 0;
-int cantParedes = 0;
-int cantCuarto = 0;
-int cantCocina = 0;
-int cantComedor = 0;
-int cantCielo = 0;
-int cantTecho = 0;
-int cantTerraza = 0;
-int cantPiscina = 0;
+using namespace std;
 
 class cimiento{
     
-    public:
-        static bool ePiso = false; //Estado para validaciones posteriores
-                                //Se usa static para que se pueda validar en otras clases
-        void crearPiso(int cantidad, int piezas_piso){
+    public://Estado para validaciones posteriores
+        //Se usa static para que se pueda validar en otras clases
+        void crearPiso(int cantidad, int piezas_piso, int cantPiso, bool ePiso){
 
             while(cantidad != 0){
                 if (piezas_piso - cantPiso > 0){
@@ -42,14 +21,15 @@ class cimiento{
                 }else{cout<<"No hay suficientes piezas"<<endl;}
 
             }
+            return cantidad;
         }
+        
 }
 
 class paredesExeternas{
-    public:
-        static bool ePared = false;
+    public: 
 
-        void crearParedes(int piezas_paredes){
+        int crearParedes(int piezas_paredes, int cantParedes, bool ePiso, bool ePared){
             
             if(cimiento::ePiso){
                 if(piezas_paredes-cantParedes > 0){
@@ -57,15 +37,14 @@ class paredesExeternas{
                     ePared = true
                 }else{cout<<"No hay suficientes piezas"<<endl;}
             }
-
+            return piezas_paredes, cantParedes, ePiso;
         } 
 }
 
 class cuarto{
     public:
-        static bool eCuarto = false;
 
-        void crearCuarto(int cantidad, int piezas_paredes){
+        int crearCuarto(int cantidad, int piezas_paredes, int cantCuarto, bool ePiso, bool eCuarto){
             
             if(cimiento::ePiso){
                 while(cantidad != 0){
@@ -78,14 +57,15 @@ class cuarto{
 
                 }else{cout<<"No hay piso"<<endl;}
             }
+            return cantidad;
         } 
 }
 
 class cocina{
     public:
-        static bool eCocina = false;
+        
 
-        void crearCocina(int cantidad, int piezas_paredes){
+        int crearCocina(int cantidad, int piezas_paredes, int cantCocina, bool ePiso, bool eCocina){
             
             if(cimiento::ePiso){
                 while(cantidad != 0){
@@ -98,14 +78,14 @@ class cocina{
 
                 }else{cout<<"No hay piso"<<endl;}
             }
+            return cantidad;
         } 
 }
 
 class comedor{
     public:
-        static bool eComedor = false;
 
-        void crearComedor(int cantidad, int piezas_paredes){
+        int crearComedor(int cantidad, int piezas_paredes, int cantComedor, bool ePiso, bool ecomedor){
             
             if(cimiento::ePiso){
                 while(cantidad != 0){
@@ -118,14 +98,14 @@ class comedor{
 
                 }else{cout<<"No hay piso"<<endl;}
             }
+            return cantidad;
         } 
 }
 
 class techo{
     public:
-        static bool eTecho = false;
 
-        void crearTecho(int piezas_techo){
+        int crearTecho(int piezas_techo, int cantTecho, bool ePared, bool eTecho){
             
             if(paredesExeternas::ePared){
                 if(piezas_techo - cantTecho > 0){
@@ -134,15 +114,15 @@ class techo{
                 }else{cout<<"No hay suficientes piezas"<<endl;}
 
             }else{cout<<"No hay paredes"<<endl;}
+
+            return piezas_techo;
         }
         
 }
 
 class cielo{
     public:
-        static bool eCielo = false;
-
-        void crearCielo(int piezas_cielo){
+        int crearCielo(int piezas_cielo, int cantCielo, bool eTecho, bool eCielo){
             if(techo::eTecho){
                 if(piezas_cielo - cantCielo > 0){
                     piezas_cielo = piezas_cielo - cantCielo;
@@ -151,13 +131,15 @@ class cielo{
 
             }else{cout<<"No hay techo"<<endl;}
 
+            return piezas_cielo;
+            
         }
 }
 
 class terraza{
     public:
 
-        void crearTerraza(int cantidad, int piezas_techo){
+        int crearTerraza(int cantidad, int piezas_techo, int cantTerraza, bool ePared, int terraza_){
             
             if(paredesExeternas::ePared){
                 while(cantidad != 0){
@@ -169,13 +151,14 @@ class terraza{
 
                 }else{cout<<"No hay paredes"<<endl;}
             }
+            return cantidad;
         }
 }
 
 class piscina{
     public:
 
-        void crearPiscina(int cantidad, int piezas_piso, int piezas_paredes){
+        int crearPiscina(int cantidad, int piezas_piso, int piezas_paredes, int cantPiscina){
 
             if(piezas_piso - cantPiscina/2 > 0 && piezas_paredes - cantPiscina/2 > 0){
                 while(cantidad != 0){
@@ -186,20 +169,106 @@ class piscina{
                 }
             }else{cout<<"No hay suficientes piezas"<<endl;}
 
+            return cantidad, piezas_piso, piezas_paredes, cantPiscina;
+
         }
 }
 
-using namespace std;
+
 
 int main(){
+    //variables booleanas
+    bool eCocina = false;
+    bool eComedor = false;
+    bool eCielo = false;
+    bool eTecho = false;
+    bool eCuarto = false;
+    bool ePared = false;
+    bool ePiso = false;
+
+    //Material
+    int piezas_piso = 1000;
+    int piezas_paredes = 1000;
+    int piezas_techo = 1000;
+    int piezas_cielo = 1000;
+
+    //Cantidad de objetos
+    int cuarto_ = 2;
+    int cocina_ = 1;
+    int comedor_ = 1;
+    int terraza_ = 1;
+    int piscina_ = 1;
+
+    //Cantidad de piezas por objeto, hay que poner una cantidad
+    int cantPiso = 30;
+    int cantParedes = 16;
+    int cantCuarto = 4;
+    int cantCocina = 4;
+    int cantComedor = 4;
+    int cantCielo = 20;
+    int cantTecho = 5;
+    int cantTerraza = 5;
+    int cantPiscina = 20;
+
     //Reglas
     string piezas[7] = {"piso", "pieza_pared", "puerta", "ventana", "techo", "cielo razo", "hueco"};
     string objetos[6][3] = {{"cimiento", "piso", 5, 1}, {"cuartos","pieza_pared", 20, 2}, {"cocina", "pieza_pared" 20, 1},
-     {"comedor", "pieza_pared" 20, 1}, {"terraza", "pieza pared", 10, 1}, {"piscina","hueco", 1, 1}};
+     {"comedor", "pieza_pared" 20, 1}, {"techo", "piezas_techo", 20, 1},{"cielo", "piezas_cielo", 30, 1},
+      {"terraza", "pieza_pared", 10, 1}, {"piscina","pizo", 1, 1}};
     //El nombre, tipo de pieza a utilizar, la cantidad de piezas a utilizar, la cantidad de objetos
 
     string orden[6] = {"cimiento", "cuartos", "cocina", "comedor", "cielo_raso", "techo", "terraza", "piscina"};
     //orden de la pila
+
+    for (int i = 0; i < 6; i++)
+    {
+        if (objetos[i][0] == "cimiento")
+        {
+            cimiento cimiento_1 = new cimiento();
+            cimiento_1.crearPiso(objetos[i][3], piezas_piso, cantPiso, ePiso);
+            
+        }
+        if (objetos[i][0] == "cuartos")
+        {
+            cuarto cuarto_1 = new cuarto();
+            cuarto_1.crearCuarto(objetos[i][3], piezas_paredes, cantCuarto, ePiso, eCuarto);
+        }
+        if (objetos[i][0] == "cocina")
+        {
+            cocina cocina_1 = new cocina();
+            cocina_1.crearCocina(objetos[i][3], piezas_paredes, cantCocina, ePiso, eCocina);
+        }
+        if (objetos[i][0] == "comedor")
+        {
+            comedor comedor_1 = new comedor();
+            comedor_1.crearComedor(objetos[i][3], piezas_paredes, cantComedor, ePiso, eComedor);
+        }
+        if (objetos[i][0] == "techo")
+        {
+            techo techo_1 = new techo();
+            techo_1.crearTecho(piezas_techo, cantTecho, ePared, eTecho);
+        }
+        if (objetos[i][0] == "cielo")
+        {
+            cielo cielo_1 = new cielo();
+            cielo_1.crearCielo(piezas_cielo, cantCielo, eTecho, eCielo);
+        }
+        
+        if (objetos[i][0] == "terraza")
+        {
+            terraza terraza_1 = new terraza();
+            terraza_1.crearTerraza(objetos[i][3], piezas_techo, cantTerraza, ePared, terraza_);
+        }
+        if (objetos[i][0] == "piscina")
+        {
+            piscina piscina_1 = new piscina();
+            piscina_1.crearPiscina(objetos[i][3], piezas_piso, piezas_paredes, cantPiscina);
+        }
+    }
+    
+
+
+
     
     //cada uno tiene una puerta y una ventana por eso no se pone
     //4 piezas_pared es una pared
@@ -208,7 +277,7 @@ int main(){
 
 
     
-
+    /*
     //Creacion de la cola
     Queue<string> *cola_piezas = new List<string>();
     Queue<string> *cola_objetos = new List<string>();
@@ -220,6 +289,8 @@ int main(){
     {
         cola_objetos->enqueue(&objetos[i][0]);
     }
+
+    */
 
 
     //Futura Impresion se está implementando mientras se crean las reglas jajsjja
