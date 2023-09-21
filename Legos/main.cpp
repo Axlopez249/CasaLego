@@ -172,20 +172,40 @@ class terraza{
         }
 }
 
+
+class hueco{
+    public:
+        huecos = 0;
+        static bool eHueco = false;
+
+        void crearHueco(int cantidad){
+            while(cantidad != 0){
+                eHueco = true;
+                huecos++;
+            }
+
+            crearPiscina(huecos, piezas_piso, piezas_paredes);
+        }
+
+
+}
+
+
 class piscina{
     public:
 
         void crearPiscina(int cantidad, int piezas_piso, int piezas_paredes){
 
-            if(piezas_piso - cantPiscina/2 > 0 && piezas_paredes - cantPiscina/2 > 0){
-                while(cantidad != 0){
-                    piezas_piso = piezas_piso - cantPiscina/2;
-                    piezas_paredes = piezas_paredes - cantPiscina/2;
-                    cantidad--;
-                    piscina_++;
-                }
-            }else{cout<<"No hay suficientes piezas"<<endl;}
-
+            if(eHueco){
+                if(piezas_piso - cantPiscina/2 > 0 && piezas_paredes - cantPiscina/2 > 0){
+                    while(cantidad != 0){
+                        piezas_piso = piezas_piso - cantPiscina/2;
+                        piezas_paredes = piezas_paredes - cantPiscina/2;
+                        cantidad--;
+                        piscina_++;
+                    }
+                }else{cout<<"No hay suficientes piezas"<<endl;}
+            }else{cout<<"No hay hueco"<<endl;}
         }
 }
 
