@@ -20,11 +20,11 @@ int main(){
     int piezas_cielo = 1000;
 
     //Cantidad de objetos
-    int cuarto_ = 2;
-    int cocina_ = 1;
-    int comedor_ = 1;
-    int terraza_ = 1;
-    int piscina_ = 1;
+    int cuarto_ = 0;
+    int cocina_ = 0;
+    int comedor_ = 0;
+    int terraza_ = 0;
+    int piscina_ = 0;
 
     //Cantidad de piezas por objeto
     int cantPiso = 30;
@@ -42,7 +42,7 @@ int main(){
 
     string objetos[8][4] = {{"cimiento", "piso", "5", "1"}, 
                             {"cuartos","pieza_pared", "20", "2"},
-                            {"cocina", "pieza_pared" "20", "1"},
+                            {"cocina", "pieza_pared", "20", "1"},
                             {"comedor", "pieza_pared", "20", "1"},
                             {"techo", "piezas_techo", "20", "1"},
                             {"cielo", "piezas_cielo", "30", "1"},
@@ -66,7 +66,7 @@ int main(){
         {
             cimiento cimiento_1;
             int cantidad = stoi(objetos[i][3]);
-            cimiento_1.crearPiso(cantidad, piezas_piso, cantPiso);
+            cimiento_1.crearPiso(piezas_piso, cantPiso);
             cola->enqueue(&objetos[i][0]);
             
         }
@@ -148,14 +148,14 @@ int main(){
             contador ++;
 
             //se van apilando los materiales y las cantidades
-            if (objetos[i][0] == "cimiento"){pila_cant_mat->push(&cantPiso);}
-            if (objetos[i][0] == "cuartos"){pila_cant_mat->push(&cantCuarto);}
-            if (objetos[i][0] == "cocina"){pila_cant_mat->push(&cantCocina);}
-            if (objetos[i][0] == "comedor"){pila_cant_mat->push(&cantComedor);}
-            if (objetos[i][0] == "techo"){pila_cant_mat->push(&cantTecho);}
-            if (objetos[i][0] == "cielo"){pila_cant_mat->push(&cantCielo);}
-            if (objetos[i][0] == "terraza"){pila_cant_mat->push(&cantTerraza);}
-            if (objetos[i][0] == "piscina"){pila_cant_mat->push(&cantPiscina);}
+            if (objetos[contador][0] == "cimiento"){pila_cant_mat->push(&cantPiso);}
+            if (objetos[contador][0] == "cuartos"){pila_cant_mat->push(&cantCuarto);}
+            if (objetos[contador][0] == "cocina"){pila_cant_mat->push(&cantCocina);}
+            if (objetos[contador][0] == "comedor"){pila_cant_mat->push(&cantComedor);}
+            if (objetos[contador][0] == "techo"){pila_cant_mat->push(&cantTecho);}
+            if (objetos[contador][0] == "cielo"){pila_cant_mat->push(&cantCielo);}
+            if (objetos[contador][0] == "terraza"){pila_cant_mat->push(&cantTerraza);}
+            if (objetos[contador][0] == "piscina"){pila_cant_mat->push(&cantPiscina);}
             
             
 
