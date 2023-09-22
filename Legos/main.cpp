@@ -54,19 +54,20 @@ int main(){
     string orden[8] = {"cimiento", "cuartos", "cocina", "comedor", "cielo_raso", "techo", "terraza", "piscina"};
     //orden de la pila
     
-    List<string> *stack;
-    Stack<string> pila = stack;
-    Queue<string> cola = stack;
+    //List<string> *stack;
+    Stack<string> *pila = new List<string>();
+    Queue<string> *cola = new List<string>();
+    Stack<int> *pila_cant_mat = new List<int>();
     
     
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 8; i++)
     {
         if (objetos[i][0] == "cimiento")
         {
             cimiento cimiento_1;
             int cantidad = stoi(objetos[i][3]);
             cimiento_1.crearPiso(cantidad, piezas_piso, cantPiso);
-            pila.push(new string("Cimiento"));
+            cola->enqueue(&objetos[i][0]);
             
         }
         if (objetos[i][0] == "cuartos")
@@ -74,7 +75,7 @@ int main(){
             cuarto cuarto_1;
             int cantidad = stoi(objetos[i][3]);
             cuarto_1.crearCuarto(cantidad, piezas_paredes, cantCuarto);
-            pila.push(new string("cuarto"));
+            cola->enqueue(&objetos[i][3]);
             cuarto_++;
 
         }
@@ -83,7 +84,7 @@ int main(){
             cocina cocina_1;
             int cantidad = stoi(objetos[i][3]);
             cocina_1.crearCocina(cantidad, piezas_paredes, cantCocina);
-            pila.push(new string("cocina"));
+            cola->enqueue(&objetos[i][3]);
             cocina_++;
 
         }
@@ -92,7 +93,7 @@ int main(){
             comedor comedor_1;
             int cantidad = stoi(objetos[i][3]);
             comedor_1.crearComedor(cantidad, piezas_paredes, cantComedor);
-            pila.push(new string("comedor"));
+            cola->enqueue(&objetos[i][3]);
             comedor_++;
 
         }
@@ -100,14 +101,14 @@ int main(){
         {
             techo techo_1;
             techo_1.crearTecho(piezas_techo, cantTecho);
-            pila.push(new string("techo"));
+            cola->enqueue(&objetos[i][3]);
 
         }
         if (objetos[i][0] == "cielo")
         {
             cielo cielo_1;
             cielo_1.crearCielo(piezas_cielo, cantCielo);
-            pila.push(new string("cielo"));
+            cola->enqueue(&objetos[i][3]);
 
         }
         
@@ -115,8 +116,8 @@ int main(){
         {
             terraza terraza_1;
             int cantidad = stoi(objetos[i][3]);
-            terraza_1.crearTerraza(cantidad, piezas_techo);
-            pila.push(new string("terraza"));
+            terraza_1.crearTerraza(cantidad, piezas_techo, cantTerraza);
+            cola->enqueue(&objetos[i][3]);
             terraza_++;
 
         }
@@ -125,10 +126,46 @@ int main(){
             piscina piscina_1;
             int cantidad = stoi(objetos[i][3]);
             piscina_1.crearPiscina(cantidad, piezas_piso, piezas_paredes, cantPiscina);
-            pila.push(new string("piscina"));
+            cola->enqueue(&objetos[i][3]);
             piscina_++;
         }
     };
+
+
+    //Todos los nombres están dentro de la cola
+    //se pasan a la pila segun el orden predeterminado
+
+    int contador = 0;
+    while (!cola->isEmpty())
+    {
+        string *objeto = cola->dequeue();
+        //Se saca el objeto y se procede a comparar con el orden del arreglo
+        //si el objeto no coincide con el orden se vuelve a encolar
+        //para luego apilarlo posteriormente
+        if (*objeto == orden[contador])
+        {
+            pila->push(objeto);
+            contador ++;
+
+            //se van apilando los materiales y las cantidades
+            if (objetos[i][0] == "cimiento"){pila_cant_mat->push(&cantPiso);}
+            if (objetos[i][0] == "cuartos"){pila_cant_mat->push(&cantCuarto);}
+            if (objetos[i][0] == "cocina"){pila_cant_mat->push(&cantCocina);}
+            if (objetos[i][0] == "comedor"){pila_cant_mat->push(&cantComedor);}
+            if (objetos[i][0] == "techo"){pila_cant_mat->push(&cantTecho);}
+            if (objetos[i][0] == "cielo"){pila_cant_mat->push(&cantCielo);}
+            if (objetos[i][0] == "terraza"){pila_cant_mat->push(&cantTerraza);}
+            if (objetos[i][0] == "piscina"){pila_cant_mat->push(&cantPiscina);}
+            
+            
+
+        }else{
+            cola->enqueue(objeto);
+        }
+        
+
+    }
+    
 }
 
 //Reglas y orden para construir una casa
